@@ -9,6 +9,7 @@
     "react-leaflet": "^2.5.0",
     "react-leaflet-control": "2.1.2",
     "react-leaflet-distortable-imageoverlay": "1.0.1",
+    "react-router-dom": "5.2.0",
     "react-scripts": "3.2.0"
   },
   "scripts": {

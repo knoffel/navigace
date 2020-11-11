@@ -17,8 +17,9 @@ const zoomLevel = 18;
 class MapView extends Component {
   constructor(props) {
     super(props);
+    window.console.log(props);
     this.state = {
-      currentLocation: { lat: 49.815, lng: 18.27 },
+      currentLocation: { lat: props.lat, lng: props.lng },
       zoom: zoomLevel
     };
     this.handleHClick = this.handleHClick.bind(this);
