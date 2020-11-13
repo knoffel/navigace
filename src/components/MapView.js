@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import { Map, TileLayer } from "react-leaflet";
 import Control from "react-leaflet-control";
 import ReactDistortableImageOverlay from "react-leaflet-distortable-imageoverlay";
+import PathFinder from "react-geojson-path-finder";
 
 import "leaflet/dist/leaflet.css";
 import data from "../assets/data";
+//import level1 from "../assets/level1";
 import Markers from "./VenueMarkers";
 
 const stamenTonerTiles =
