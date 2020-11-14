@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Map, TileLayer } from "react-leaflet";
+import { Map, TileLayer, Polyline } from "react-leaflet";
 import Control from "react-leaflet-control";
 import ReactDistortableImageOverlay from "react-leaflet-distortable-imageoverlay";
-import PathFinder from "react-geojson-path-finder";
+import PathFinder from "geojson-path-finder-nw";
+import point from "turf-point";
 
 import "leaflet/dist/leaflet.css";
 import data from "../assets/data";
@@ -15,6 +16,63 @@ const stamenTonerAttr =
   'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 const mapCenter = [49.815, 18.27];
 const zoomLevel = 18;
+const geojson = {
+  type: "FeatureCollection",
+  features: [
+    {
+      type: "Feature",
+      geometry: {
+        type: "LineString",
+        coordinates: [
+          [49.8146818952885, 18.268606328072604],
+          [49.81483246833864, 18.269146793189105]
+        ]
+      },
+      properties: {}
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "LineString",
+        coordinates: [
+          [49.81483246833864, 18.269146793189105],
+          [49.81522317725818, 18.268702217044886]
+        ]
+      },
+      properties: {}
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "LineString",
+        coordinates: [
+          [49.81483246833864, 18.269146793189105],
+          [49.815042317929006, 18.269922622146662]
+        ]
+      },
+      properties: {}
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "LineString",
+        coordinates: [
+          [49.815042317929006, 18.269922622146662],
+          [49.81484804483436, 18.270436935725268]
+        ]
+      },
+      properties: {}
+    }
+  ]
+};
+
+const pathFinder = new PathFinder(geojson, {
+  weightFn: function (a, b, props) {
+    var dx = a[0] - b[0];
+    var dy = a[1] - b[1];
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+});
 
 class MapView extends Component {
   constructor(props) {
@@ -49,6 +107,11 @@ class MapView extends Component {
 
   render() {
     const { currentLocation, zoom } = this.state;
+    const path = pathFinder.findPath(
+      point([49.8146818952885, 18.268606328072604]),
+      point([49.81522317725818, 18.268702217044886])
+    );
+    window.console.log(path);
 
     return (
       <Map
@@ -61,6 +124,8 @@ class MapView extends Component {
         <TileLayer url={stamenTonerTiles} attribution={stamenTonerAttr} />
 
         <Markers venues={data.venues} />
+
+        <Polyline positions={path.path} />
 
         <Control position="topright">
           <div
